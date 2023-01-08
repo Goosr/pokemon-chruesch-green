@@ -30,6 +30,13 @@
       "elevation": 0,
       "dest_map": "MAP_LITTLEROOT_TOWN",
       "dest_warp_id": "3"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "elevation": 0,
+      "dest_map": "MAP_LITTLEROOT_TOWN_NEW_PROFESSOR_BIRCHS_LAB_SECRET_ROOM",
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [

@@ -4420,6 +4420,16 @@
       "secondary_tileset": "gTileset_Lab",
       "border_filepath": "data/layouts/LittlerootTown_NewProfessorBirchsLab/border.bin",
       "blockdata_filepath": "data/layouts/LittlerootTown_NewProfessorBirchsLab/map.bin"
+    },
+    {
+      "id": "LAYOUT_LITTLEROOT_TOWN_NEW_PROFESSOR_BIRCHS_LAB_SECRET_ROOM",
+      "name": "LittlerootTown_NewProfessorBirchsLab_SecretRoom_Layout",
+      "width": 20,
+      "height": 15,
+      "primary_tileset": "gTileset_Building",
+      "secondary_tileset": "gTileset_Lab",
+      "border_filepath": "data/layouts/LittlerootTown_NewProfessorBirchsLab_SecretRoom/border.bin",
+      "blockdata_filepath": "data/layouts/LittlerootTown_NewProfessorBirchsLab_SecretRoom/map.bin"
     }
   ]
 }

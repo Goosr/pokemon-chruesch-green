@@ -1,0 +1,2 @@
+LittlerootTown_NewProfessorBirchsLab_SecretRoom_MapScripts::
+	.byte 0
