@@ -999,3 +999,56 @@ LittlerootTown_ProfessorBirchsLab_Text_ScottAboardSSTidalCall:
 	.string "we meet. I'll be waiting!\p"
 	.string "… … … … … …\n"
 	.string "… … … … … Click!$"
+
+LittlerootTown_ProfessorBirchsLab_NewMapScripts::
+	map_script MAP_SCRIPT_ON_LOAD, LittlerootTown_ProfessorBirchsLab_NewMapScripts_MAP_SCRIPT_ON_LOAD
+	.byte 0
+
+LittlerootTown_ProfessorBirchsLab_NewMapScripts_MAP_SCRIPT_ON_LOAD:
+	compare VAR_SECRET_BUTTON, 1
+	goto_if_eq LittlerootTown_ProfessorBirchsLab_NewMapScripts_MAP_SCRIPT_ON_LOAD_1
+	return
+
+LittlerootTown_ProfessorBirchsLab_NewMapScripts_MAP_SCRIPT_ON_LOAD_1:
+	setmetatile 2, 6, METATILE_SecretBase_NoteMat_A, TRUE
+	setmetatile 2, 7, METATILE_Fortree_SecretBase_LongGrass_BottomRight, FALSE
+	setmetatile 3, 6, METATILE_Cave_SealedChamberEntrance_TopRight, TRUE
+	setmetatile 3, 7, METATILE_Cave_SealedChamberEntrance_BottomRight, TRUE
+	setmetatile 4, 6, METATILE_SecretBase_RedBrick_Bottom, TRUE
+	setmetatile 4, 7, METATILE_Cave_SealedChamberBraille_Mid, TRUE
+	setmetatile 4, 8, METATILE_TrickHousePuzzle_Lever_Off, TRUE
+	special DrawWholeMapView
+	return
+
+
+LittlerootTown_ProfessorBirchsLab_EventScript_NewSign::
+	lockall
+	msgbox LittlerootTown_ProfessorBirchsLab_EventScript_NewSign_Text_0, MSGBOX_YESNO
+	compare VAR_RESULT, YES
+	goto_if_eq LittlerootTown_ProfessorBirchsLab_EventScript_NewSign_2
+	msgbox LittlerootTown_ProfessorBirchsLab_EventScript_NewSign_Text_3
+	waitmessage
+LittlerootTown_ProfessorBirchsLab_EventScript_NewSign_1:
+	releaseall
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_NewSign_2:
+	setvar VAR_SECRET_BUTTON, 1
+	msgbox LittlerootTown_ProfessorBirchsLab_EventScript_NewSign_Text_1
+	waitmessage
+	msgbox LittlerootTown_ProfessorBirchsLab_EventScript_NewSign_Text_2
+	waitmessage
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_NewSign_1
+
+
+LittlerootTown_ProfessorBirchsLab_EventScript_NewSign_Text_0:
+	.string "This plant looks strange.\n It seems to be out of metal.\p There is a tiny red button.\n Do you want to press it?$"
+
+LittlerootTown_ProfessorBirchsLab_EventScript_NewSign_Text_1:
+	.string "You pressed the button.$"
+
+LittlerootTown_ProfessorBirchsLab_EventScript_NewSign_Text_2:
+	.string "The bookshelf moved aside!$"
+
+LittlerootTown_ProfessorBirchsLab_EventScript_NewSign_Text_3:
+	.string "You didn't press the button.$"

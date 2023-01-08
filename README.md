@@ -1,3 +1,10 @@
+# PokemonChrueschGreen
+
+## What is PokemonChrueschGreen?
+
+PokemonChrueschGreen is a fanmade pokemon hacking project. The hack is based on the already existing pokeemerald Expansion (more information below).
+
+
 # pokeemerald Expansion
 
 ## What is the pokeemerald Expansion?
