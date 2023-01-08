@@ -17,20 +17,20 @@
     {
       "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
       "x": 8,
-      "y": 5,
+      "y": 1,
       "elevation": 0,
       "movement_type": "MOVEMENT_TYPE_NONE",
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "NULL",
-      "flag": "0"
+      "script": "LittlerootTown_NewProfessorBirchsLab_SecretRoom_Pokeball",
+      "flag": "FLAG_RECEIVED_MEW"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
       "x": 9,
-      "y": 5,
+      "y": 7,
       "elevation": 0,
       "movement_type": "MOVEMENT_TYPE_NONE",
       "movement_range_x": 0,
@@ -43,7 +43,7 @@
     {
       "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
       "x": 10,
-      "y": 5,
+      "y": 7,
       "elevation": 0,
       "movement_type": "MOVEMENT_TYPE_NONE",
       "movement_range_x": 0,
@@ -56,7 +56,7 @@
     {
       "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
       "x": 11,
-      "y": 5,
+      "y": 7,
       "elevation": 0,
       "movement_type": "MOVEMENT_TYPE_NONE",
       "movement_range_x": 0,
@@ -70,14 +70,14 @@
   "warp_events": [
     {
       "x": 6,
-      "y": 14,
+      "y": 12,
       "elevation": 0,
       "dest_map": "MAP_LITTLEROOT_TOWN_NEW_PROFESSOR_BIRCHS_LAB",
       "dest_warp_id": "2"
     },
     {
       "x": 7,
-      "y": 14,
+      "y": 12,
       "elevation": 0,
       "dest_map": "MAP_LITTLEROOT_TOWN_NEW_PROFESSOR_BIRCHS_LAB",
       "dest_warp_id": "2"
