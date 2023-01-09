@@ -4434,7 +4434,7 @@
     {
       "id": "LAYOUT_LITTLEROOT_FOREST",
       "name": "Littleroot_Forest_Layout",
-      "width": 20,
+      "width": 22,
       "height": 20,
       "primary_tileset": "gTileset_General",
       "secondary_tileset": "gTileset_Petalburg",
