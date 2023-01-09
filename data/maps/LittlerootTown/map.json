@@ -17,6 +17,11 @@
       "map": "MAP_ROUTE101",
       "offset": 0,
       "direction": "up"
+    },
+    {
+      "map": "MAP_LITTLEROOT_FOREST",
+      "offset": 0,
+      "direction": "right"
     }
   ],
   "object_events": [
@@ -148,11 +153,18 @@
       "dest_warp_id": "0"
     },
     {
-      "x": 24,
+      "x": 22,
       "y": 6,
       "elevation": 0,
       "dest_map": "MAP_LITTLEROOT_TOWN_NEW_PROFESSOR_BIRCHS_LAB",
       "dest_warp_id": "0"
+    },
+    {
+      "x": 27,
+      "y": 6,
+      "elevation": 0,
+      "dest_map": "MAP_LITTLEROOT_TOWN_NEW_PROFESSOR_BIRCHS_LAB",
+      "dest_warp_id": "3"
     }
   ],
   "coord_events": [

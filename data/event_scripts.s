@@ -1063,3 +1063,5 @@ Common_EventScript_LegendaryFlewAway::
 	.include "data/maps/LittlerootTown_NewProfessorBirchsLab/scripts.inc"
 
 	.include "data/maps/LittlerootTown_NewProfessorBirchsLab_SecretRoom/scripts.inc"
+
+	.include "data/maps/Littleroot_Forest/scripts.inc"
