@@ -1,3 +1,4 @@
+raw `
 .set LOCALID_TWIN, 1
 .set LOCALID_MOM, 4
 .set LOCALID_RIVAL, 7
@@ -1019,35 +1020,36 @@ LittlerootTown_Text_BirchSomethingToShowYouAtLab:
 	.string "I have something to show you.\n"
 	.string "Let's go to my LAB.$"
 
-LittlerootTown_Trigger_BlockPath::
-	lockall
-	applymovement 9, ForestGuardian1
-	msgbox ForestGuardian
-	applymovement OBJ_EVENT_ID_PLAYER, StopPlayer
-	applymovement 9, ForestGuardian2
-	waitmovement 0
-	releaseall
-	return
+`
 
+script LittlerootTown_Trigger_BlockPath {
+    lockall
+    applymovement(9, ForestGuardian1)
+    msgbox(ForestGuardian)
+    applymovement(OBJ_EVENT_ID_PLAYER, StopPlayer)
+    applymovement(9, ForestGuardian2)
+    waitmovement(0)
+    releaseall
+}
 
-LittlerootTown_ForestGuardian::
-	lockall
-	msgbox ForestGuardian
-	releaseall
-	return
+script LittlerootTown_ForestGuardian {
+    lockall
+    msgbox(ForestGuardian)
+    releaseall
+}
 
+movement StopPlayer {
+    walk_left
+}
 
-StopPlayer:
-	walk_left
-	step_end
+movement ForestGuardian1 {
+    face_down
+}
 
-ForestGuardian1:
-	face_down
-	step_end
+movement ForestGuardian2 {
+    face_left
+}
 
-ForestGuardian2:
-	face_left
-	step_end
-
-ForestGuardian::
-	.string "You are not allowed to enter!\p This is a holy place.$"
+text ForestGuardian {
+    "You are not allowed to enter!\p This is a holy place."
+}
