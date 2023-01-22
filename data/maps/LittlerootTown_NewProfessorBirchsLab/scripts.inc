@@ -60,6 +60,13 @@ LittlerootTown_NewProfessorBirchsLab_EventScript_OpenSecretRoom::
 	return
 
 
+LittlerootTown_NewProfessorBirchsLab_BrokenDoorSign::
+	lockall
+	msgbox LittlerootTown_NewProfessorBirchsLab_BrokenDoorSign_Text_0
+	releaseall
+	end
+
+
 LittlerootTown_NewProfessorBirchsLab_EventScript_Bookshelf_Text_0:
 	.string "There is a lever behind\n one of the books.\p Do you want to flip it?$"
 
@@ -74,3 +81,6 @@ LittlerootTown_NewProfessorBirchsLab_EventScript_Yes_Text_0:
 
 LittlerootTown_NewProfessorBirchsLab_EventScript_Yes_Text_1:
 	.string "The bookshelf moved aside!$"
+
+LittlerootTown_NewProfessorBirchsLab_BrokenDoorSign_Text_0:
+	.string "This door looks demolished.\n It can't be opened$"
