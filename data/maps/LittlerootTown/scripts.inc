@@ -7,6 +7,7 @@ LittlerootTown_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, LittlerootTown_OnTransition
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, LittlerootTown_OnFrame
 	map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, LittlerootTown_OnWarp
+	map_script MAP_SCRIPT_ON_LOAD, LittlerootTown_OnLoad
 	.byte 0
 
 	@ State descriptions for VAR_LITTLEROOT_TOWN_STATE
@@ -1019,6 +1020,78 @@ LittlerootTown_Text_BirchSomethingToShowYouAtLab:
 	.string "I have something to show you.\n"
 	.string "Let's go to my LAB.$"
 
+LittlerootTown_EventScript_LockedDoor_left::
+	lockall
+	checkitem ITEM_LOCKPICK, 1
+	compare VAR_RESULT, TRUE
+	goto_if_eq LittlerootTown_EventScript_LockedDoor_left_2
+	msgbox LockedDoor
+LittlerootTown_EventScript_LockedDoor_left_1:
+	releaseall
+	end
+
+LittlerootTown_EventScript_LockedDoor_left_2:
+	compare VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED, 1
+	goto_if_ne LittlerootTown_EventScript_LockedDoor_left_5
+	msgbox LittlerootTown_EventScript_LockedDoor_left_Text_1
+	goto LittlerootTown_EventScript_LockedDoor_left_1
+
+LittlerootTown_EventScript_LockedDoor_left_5:
+	msgbox LockedDoor
+	msgbox LittlerootTown_EventScript_LockedDoor_left_Text_0, MSGBOX_YESNO
+	compare VAR_RESULT, YES
+	goto_if_eq LittlerootTown_EventScript_LockedDoor_left_8
+	goto LittlerootTown_EventScript_LockedDoor_left_1
+
+LittlerootTown_EventScript_LockedDoor_left_8:
+	setvar VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED, 1
+	call LittlerootTown_PickLock_Yes
+	goto LittlerootTown_EventScript_LockedDoor_left_1
+
+
+LittlerootTown_EventScript_LockedDoor_right::
+	lockall
+	msgbox LittlerootTown_EventScript_LockedDoor_right_Text_0
+	releaseall
+	end
+
+
+LittlerootTown_OnLoad::
+	compare VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED, 1
+	goto_if_eq LittlerootTown_OnLoad_2
+LittlerootTown_OnLoad_1:
+	end
+
+LittlerootTown_OnLoad_2:
+	call LittlerootTown_LockPicked
+	goto LittlerootTown_OnLoad_1
+
+
+LittlerootTown_PickLock_Yes::
+	setvar VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED, 1
+	playse SE_CLICK
+	waitse
+	call LittlerootTown_LockPicked
+	msgbox LittlerootTown_PickLock_Yes_Text_0
+	waitmessage
+	return
+
+
+LittlerootTown_LockPicked::
+	setmetatile 22, 6, 0x249, FALSE
+	special DrawWholeMapView
+	return
+
+
+LittlerootTown_GetLockPick::
+	lockall
+	faceplayer
+	msgbox LittlerootTown_GetLockPick_Text_0
+	giveitem ITEM_LOCKPICK, 1
+	releaseall
+	end
+
+
 LittlerootTown_Trigger_BlockPath::
 	lockall
 	applymovement 9, ForestGuardian1
@@ -1049,5 +1122,23 @@ ForestGuardian2:
 	face_left
 	step_end
 
+LittlerootTown_EventScript_LockedDoor_left_Text_0:
+	.string "Wanna try to pick the lock?$"
+
+LittlerootTown_EventScript_LockedDoor_left_Text_1:
+	.string "The door got picked.$"
+
+LittlerootTown_EventScript_LockedDoor_right_Text_0:
+	.string "The lock of this door is broken.\n Can't pick this lock.$"
+
+LittlerootTown_PickLock_Yes_Text_0:
+	.string "The lock gave in.$"
+
+LittlerootTown_GetLockPick_Text_0:
+	.string "Say nothing, just take this.$"
+
 ForestGuardian::
 	.string "You are not allowed to enter!\p This is a holy place.$"
+
+LockedDoor::
+	.string "The door is locked.$"

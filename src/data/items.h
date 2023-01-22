@@ -9852,4 +9852,18 @@ const struct Item gItems[] =
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
+
+    [ITEM_LOCKPICK] =
+    {
+        .name = _("Lockpick"),
+        .itemId = ITEM_LOCKPICK,
+        .price = 0,
+        .description = sLockpickDesc,
+        .importance = 1,
+        .registrability = TRUE,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+
 };

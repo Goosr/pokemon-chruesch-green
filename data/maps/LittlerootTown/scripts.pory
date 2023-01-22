@@ -8,6 +8,7 @@ LittlerootTown_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, LittlerootTown_OnTransition
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, LittlerootTown_OnFrame
 	map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, LittlerootTown_OnWarp
+	map_script MAP_SCRIPT_ON_LOAD, LittlerootTown_OnLoad
 	.byte 0
 
 	@ State descriptions for VAR_LITTLEROOT_TOWN_STATE
@@ -1022,12 +1023,76 @@ LittlerootTown_Text_BirchSomethingToShowYouAtLab:
 
 `
 
+script LittlerootTown_EventScript_LockedDoor_left {
+    lockall
+    checkitem(ITEM_LOCKPICK, 1) // checks if the player has a lockpick in his pockets.
+    if(var(VAR_RESULT) == TRUE){ // if the player has a lock pick, the next if-clause checks, whether the door has already been picked or not.
+        if(var(VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED) != 1){ // checks if the door has been picked already.
+            msgbox(LockedDoor) // calls text: The door is locked.
+            msgbox("Wanna try to pick the lock?", MSGBOX_YESNO) // asks if you want to try to pick the lock.
+            if(var(VAR_RESULT) == YES){
+                setvar(VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED, 1) // sets the variable: VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED to 1.
+				call(LittlerootTown_PickLock_Yes) // calls script that picks the lock.
+            }     
+        }
+
+        else{
+            msgbox("The door got picked.") // tells the player that the door was picked, when he already picked the lock.
+        }
+    }
+
+    else{
+        msgbox(LockedDoor) // says the door is locked.
+    }
+    releaseall
+    end
+}
+
+script LittlerootTown_EventScript_LockedDoor_right {
+    lockall
+    msgbox("The lock of this door is broken.\n Can't pick this lock.")
+    releaseall
+    end
+}
+
+script LittlerootTown_OnLoad { // is loaded initially when entering the map.
+    if(var(VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED) == 1){ //checks the set variable and sets metatiles according to the story progression by calling a script if variable = 1.
+        call(LittlerootTown_LockPicked)
+    }
+    end
+}
+
+script LittlerootTown_PickLock_Yes {
+    setvar(VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED, 1) // sets the variable: VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED to 1.
+	playse(SE_CLICK) // Makes a clicking noise.
+    waitse
+	call(LittlerootTown_LockPicked) // calls the script that sets the metatiles to the picked doors.
+    msgbox("The lock gave in.")
+	waitmessage
+    return
+}
+
+script LittlerootTown_LockPicked {
+    setmetatile(22, 6, 0x249, FALSE) // exchanges the left impassable door of ProfBirchsNEWLAB with a passable one, so you can enter.
+    special(DrawWholeMapView) // special(DrawWholeMapView) reloads the map with all the made changes
+    return
+}
+
+script LittlerootTown_GetLockPick {
+    lockall
+	faceplayer
+    msgbox("Say nothing, just take this.")
+    giveitem(ITEM_LOCKPICK, 1)
+    releaseall
+    end
+}
+
 script LittlerootTown_Trigger_BlockPath {
     lockall
-    applymovement(9, ForestGuardian1)
+    applymovement(9, ForestGuardian1) // moves Guardians view down by calling a movement script.
     msgbox(ForestGuardian)
-    applymovement(OBJ_EVENT_ID_PLAYER, StopPlayer)
-    applymovement(9, ForestGuardian2)
+    applymovement(OBJ_EVENT_ID_PLAYER, StopPlayer) // calls script "StopPlayer" which pull the player away 1 field to the left.
+    applymovement(9, ForestGuardian2) // moves Guardians view up by calling a movement script.
     waitmovement(0)
     releaseall
 }
@@ -1052,4 +1117,8 @@ movement ForestGuardian2 {
 
 text ForestGuardian {
     "You are not allowed to enter!\p This is a holy place."
+}
+
+text LockedDoor {
+    "The door is locked."
 }
