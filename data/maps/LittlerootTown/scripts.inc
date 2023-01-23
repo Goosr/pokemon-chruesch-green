@@ -1020,64 +1020,62 @@ LittlerootTown_Text_BirchSomethingToShowYouAtLab:
 	.string "I have something to show you.\n"
 	.string "Let's go to my LAB.$"
 
-LittlerootTown_EventScript_LockedDoor_left::
-	lockall
-	checkitem ITEM_LOCKPICK, 1
-	compare VAR_RESULT, TRUE
-	goto_if_eq LittlerootTown_EventScript_LockedDoor_left_2
-	msgbox LockedDoor
-LittlerootTown_EventScript_LockedDoor_left_1:
-	releaseall
-	end
-
-LittlerootTown_EventScript_LockedDoor_left_2:
-	compare VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED, 1
-	goto_if_ne LittlerootTown_EventScript_LockedDoor_left_5
-	msgbox LittlerootTown_EventScript_LockedDoor_left_Text_1
-	goto LittlerootTown_EventScript_LockedDoor_left_1
-
-LittlerootTown_EventScript_LockedDoor_left_5:
-	msgbox LockedDoor
-	msgbox LittlerootTown_EventScript_LockedDoor_left_Text_0, MSGBOX_YESNO
-	compare VAR_RESULT, YES
-	goto_if_eq LittlerootTown_EventScript_LockedDoor_left_8
-	goto LittlerootTown_EventScript_LockedDoor_left_1
-
-LittlerootTown_EventScript_LockedDoor_left_8:
-	setvar VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED, 1
-	call LittlerootTown_PickLock_Yes
-	goto LittlerootTown_EventScript_LockedDoor_left_1
-
-
-LittlerootTown_EventScript_LockedDoor_right::
-	lockall
-	msgbox LittlerootTown_EventScript_LockedDoor_right_Text_0
-	releaseall
-	end
-
-
 LittlerootTown_OnLoad::
-	compare VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED, 1
+	compare VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED, 0
 	goto_if_eq LittlerootTown_OnLoad_2
 LittlerootTown_OnLoad_1:
 	end
 
 LittlerootTown_OnLoad_2:
-	call LittlerootTown_LockPicked
+	call LittlerootTown_DoorLocked
 	goto LittlerootTown_OnLoad_1
 
 
-LittlerootTown_PickLock_Yes::
+LittlerootTown_EventScript_LockedDoor::
+	lockall
+	checkitem ITEM_LOCKPICK, 1
+	compare VAR_RESULT, TRUE
+	goto_if_eq LittlerootTown_EventScript_LockedDoor_2
+	msgbox LockedDoor
+LittlerootTown_EventScript_LockedDoor_1:
+	releaseall
+	end
+
+LittlerootTown_EventScript_LockedDoor_2:
+	compare VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED, 0
+	goto_if_eq LittlerootTown_EventScript_LockedDoor_5
+	msgbox LittlerootTown_EventScript_LockedDoor_Text_1
+	goto LittlerootTown_EventScript_LockedDoor_1
+
+LittlerootTown_EventScript_LockedDoor_5:
+	msgbox LockedDoor
+	msgbox LittlerootTown_EventScript_LockedDoor_Text_0, MSGBOX_YESNO
+	compare VAR_RESULT, YES
+	goto_if_eq LittlerootTown_EventScript_LockedDoor_8
+	goto LittlerootTown_EventScript_LockedDoor_1
+
+LittlerootTown_EventScript_LockedDoor_8:
+	call LittlerootTown_PickLock
+	goto LittlerootTown_EventScript_LockedDoor_1
+
+
+LittlerootTown_PickLock::
 	setvar VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED, 1
 	playse SE_CLICK
 	waitse
-	call LittlerootTown_LockPicked
-	msgbox LittlerootTown_PickLock_Yes_Text_0
+	msgbox LittlerootTown_PickLock_Text_0
 	waitmessage
+	call LittlerootTown_DoorOpened
 	return
 
 
-LittlerootTown_LockPicked::
+LittlerootTown_DoorLocked::
+	setmetatile 22, 6, 0x22F, TRUE
+	special DrawWholeMapView
+	return
+
+
+LittlerootTown_DoorOpened::
 	setmetatile 22, 6, 0x249, FALSE
 	special DrawWholeMapView
 	return
@@ -1088,8 +1086,27 @@ LittlerootTown_GetLockPick::
 	faceplayer
 	msgbox LittlerootTown_GetLockPick_Text_0
 	giveitem ITEM_LOCKPICK, 1
+	closemessage
+	getplayerxy VAR_TEMP_1, VAR_TEMP_2
+	compare VAR_TEMP_1, 24
+	goto_if_eq LittlerootTown_GetLockPick_4
+LittlerootTown_GetLockPick_3:
+	applymovement 10, LockPickSpecialistNorthOrWestOrSouth
+LittlerootTown_GetLockPick_1:
+	waitmovement 0
+	removeobject 10
+	setflag FLAG_LockPick_Specialist
 	releaseall
 	end
+
+LittlerootTown_GetLockPick_2:
+	applymovement 10, LockPickSpecialistEast
+	goto LittlerootTown_GetLockPick_1
+
+LittlerootTown_GetLockPick_4:
+	compare VAR_TEMP_2, 10
+	goto_if_eq LittlerootTown_GetLockPick_2
+	goto LittlerootTown_GetLockPick_3
 
 
 LittlerootTown_Trigger_BlockPath::
@@ -1122,16 +1139,40 @@ ForestGuardian2:
 	face_left
 	step_end
 
-LittlerootTown_EventScript_LockedDoor_left_Text_0:
+LockPickSpecialistEast:
+	walk_down
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	return
+	step_end
+
+LockPickSpecialistNorthOrWestOrSouth:
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	return
+	step_end
+
+LittlerootTown_EventScript_LockedDoor_Text_0:
 	.string "Wanna try to pick the lock?$"
 
-LittlerootTown_EventScript_LockedDoor_left_Text_1:
+LittlerootTown_EventScript_LockedDoor_Text_1:
 	.string "The door got picked.$"
 
-LittlerootTown_EventScript_LockedDoor_right_Text_0:
-	.string "The lock of this door is broken.\n Can't pick this lock.$"
-
-LittlerootTown_PickLock_Yes_Text_0:
+LittlerootTown_PickLock_Text_0:
 	.string "The lock gave in.$"
 
 LittlerootTown_GetLockPick_Text_0:

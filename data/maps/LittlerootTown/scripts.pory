@@ -1023,59 +1023,64 @@ LittlerootTown_Text_BirchSomethingToShowYouAtLab:
 
 `
 
-script LittlerootTown_EventScript_LockedDoor_left {
-    lockall
-    checkitem(ITEM_LOCKPICK, 1) // checks if the player has a lockpick in his pockets.
-    if(var(VAR_RESULT) == TRUE){ // if the player has a lock pick, the next if-clause checks, whether the door has already been picked or not.
-        if(var(VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED) != 1){ // checks if the door has been picked already.
-            msgbox(LockedDoor) // calls text: The door is locked.
-            msgbox("Wanna try to pick the lock?", MSGBOX_YESNO) // asks if you want to try to pick the lock.
-            if(var(VAR_RESULT) == YES){
-                setvar(VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED, 1) // sets the variable: VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED to 1.
-				call(LittlerootTown_PickLock_Yes) // calls script that picks the lock.
-            }     
+//Script funktioniert nicht wie es soll! -> Am besten die funktionierenden Codes rauskopieren und den restlichen code neu schreiben.
+//Zu viele Bugs mit dem LockPickSpecialist ... und die Türe funktioniert auch nicht.
+
+// Var = 0; Door is locked
+// Var = 1; Door is opened
+//Mapscripts can be added in the raw code!
+
+script LittlerootTown_OnLoad {
+    if(var(VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED) == 0){
+        call(LittlerootTown_DoorLocked)
+    }
+    end
+}
+
+script LittlerootTown_EventScript_LockedDoor {
+	lockall
+	checkitem(ITEM_LOCKPICK, 1)
+	if(var(VAR_RESULT) == TRUE){
+		if(var(VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED) == 0){
+			msgbox(LockedDoor)
+			msgbox("Wanna try to pick the lock?", MSGBOX_YESNO)
+			if(var(VAR_RESULT) == YES){
+				call(LittlerootTown_PickLock)
+			}
+		}
+		
+		else{
+            msgbox("The door got picked.")
         }
+	}
 
-        else{
-            msgbox("The door got picked.") // tells the player that the door was picked, when he already picked the lock.
-        }
-    }
-
-    else{
-        msgbox(LockedDoor) // says the door is locked.
-    }
-    releaseall
-    end
+	else{
+		msgbox(LockedDoor)
+	}
+	releaseall
+	end	
 }
 
-script LittlerootTown_EventScript_LockedDoor_right {
-    lockall
-    msgbox("The lock of this door is broken.\n Can't pick this lock.")
-    releaseall
-    end
-}
-
-script LittlerootTown_OnLoad { // is loaded initially when entering the map.
-    if(var(VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED) == 1){ //checks the set variable and sets metatiles according to the story progression by calling a script if variable = 1.
-        call(LittlerootTown_LockPicked)
-    }
-    end
-}
-
-script LittlerootTown_PickLock_Yes {
-    setvar(VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED, 1) // sets the variable: VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED to 1.
-	playse(SE_CLICK) // Makes a clicking noise.
+script LittlerootTown_PickLock {
+	setvar(VAR_LITTLEROOT_TOWN_BIRCHS_LAB_LOCK_PICKED, 1)
+	playse(SE_CLICK)
     waitse
-	call(LittlerootTown_LockPicked) // calls the script that sets the metatiles to the picked doors.
-    msgbox("The lock gave in.")
+	msgbox("The lock gave in.")
 	waitmessage
+	call(LittlerootTown_DoorOpened)
     return
 }
 
-script LittlerootTown_LockPicked {
-    setmetatile(22, 6, 0x249, FALSE) // exchanges the left impassable door of ProfBirchsNEWLAB with a passable one, so you can enter.
-    special(DrawWholeMapView) // special(DrawWholeMapView) reloads the map with all the made changes
-    return
+script LittlerootTown_DoorLocked {
+	setmetatile(22, 6, 0x22F, TRUE)
+	special(DrawWholeMapView)
+	return
+}
+
+script LittlerootTown_DoorOpened {
+	setmetatile(22, 6, 0x249, FALSE)
+	special(DrawWholeMapView)
+	return
 }
 
 script LittlerootTown_GetLockPick {
@@ -1083,7 +1088,18 @@ script LittlerootTown_GetLockPick {
 	faceplayer
     msgbox("Say nothing, just take this.")
     giveitem(ITEM_LOCKPICK, 1)
-    releaseall
+	closemessage
+	getplayerxy(VAR_TEMP_1, VAR_TEMP_2)
+	if(var(VAR_TEMP_1) == 24 && var(VAR_TEMP_2) == 10){
+		applymovement(10, LockPickSpecialistEast)
+	}
+	else{
+		applymovement(10, LockPickSpecialistNorthOrWestOrSouth)
+	}
+	waitmovement(0)
+	removeobject(10) //This line doesn't work?! -> check with Chad-Chan
+	setflag(FLAG_LockPick_Specialist) //This line doesn't work?! -> check with Chad-Chan
+	releaseall
     end
 }
 
@@ -1113,6 +1129,17 @@ movement ForestGuardian1 {
 
 movement ForestGuardian2 {
     face_left
+}
+
+movement LockPickSpecialistEast{
+	walk_down
+	walk_left * 9
+	return
+}
+
+movement LockPickSpecialistNorthOrWestOrSouth{
+	walk_left * 9
+	return
 }
 
 text ForestGuardian {

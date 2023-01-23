@@ -57,10 +57,3 @@ script LittlerootTown_NewProfessorBirchsLab_EventScript_OpenSecretRoom {
     special(DrawWholeMapView) //special(DrawWholeMapView) reloads the map with all the made changes
     return
 }
-
-script LittlerootTown_NewProfessorBirchsLab_BrokenDoorSign {
-    lockall
-    msgbox("This door looks demolished.\n It can't be opened")
-    releaseall
-    end
-}
