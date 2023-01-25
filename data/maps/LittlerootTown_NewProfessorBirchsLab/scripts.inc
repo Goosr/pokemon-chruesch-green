@@ -29,11 +29,18 @@ LittlerootTown_NewProfessorBirchsLab_OnLoad::
 	compare VAR_SECRET_BUTTON, 1
 	goto_if_eq LittlerootTown_NewProfessorBirchsLab_OnLoad_2
 LittlerootTown_NewProfessorBirchsLab_OnLoad_1:
+	compare VAR_SECRET_PC, 1
+	goto_if_eq LittlerootTown_NewProfessorBirchsLab_OnLoad_5
+LittlerootTown_NewProfessorBirchsLab_OnLoad_4:
 	end
 
 LittlerootTown_NewProfessorBirchsLab_OnLoad_2:
 	call LittlerootTown_NewProfessorBirchsLab_EventScript_OpenSecretRoom
 	goto LittlerootTown_NewProfessorBirchsLab_OnLoad_1
+
+LittlerootTown_NewProfessorBirchsLab_OnLoad_5:
+	call LittlerootTown_NewProfessorBirchsLab_EventScript_OpenedWall
+	goto LittlerootTown_NewProfessorBirchsLab_OnLoad_4
 
 
 LittlerootTown_NewProfessorBirchsLab_EventScript_Yes::
@@ -60,6 +67,48 @@ LittlerootTown_NewProfessorBirchsLab_EventScript_OpenSecretRoom::
 	return
 
 
+LittlerootTown_NewProfessorBirchsLab_EventScript_SecretPC::
+	lockall
+	compare VAR_SECRET_PC, 1
+	goto_if_ne LittlerootTown_NewProfessorBirchsLab_EventScript_SecretPC_2
+	msgbox SecretPC2
+LittlerootTown_NewProfessorBirchsLab_EventScript_SecretPC_1:
+	releaseall
+	end
+
+LittlerootTown_NewProfessorBirchsLab_EventScript_SecretPC_2:
+	msgbox SecretPC1
+	waitmessage
+	call LittlerootTown_NewProfessorBirchsLab_EventScript_Wall
+	goto LittlerootTown_NewProfessorBirchsLab_EventScript_SecretPC_1
+
+
+LittlerootTown_NewProfessorBirchsLab_EventScript_Wall::
+	setvar VAR_SECRET_PC, 1
+	playse SE_BANG
+	call LittlerootTown_NewProfessorBirchsLab_EventScript_OpenedWall
+	waitse
+	msgbox SecretPC3
+	waitmessage
+	return
+
+
+LittlerootTown_NewProfessorBirchsLab_EventScript_OpenedWall::
+	setmetatile 18, 2, 0x273, TRUE
+	setmetatile 18, 3, 0x270, TRUE
+	setmetatile 18, 4, 0x278, TRUE
+	setmetatile 18, 5, 0x271, FALSE
+	setmetatile 18, 6, 0x269, FALSE
+	setmetatile 18, 7, 0x268, FALSE
+	setmetatile 18, 8, 0x27B, TRUE
+	setmetatile 19, 5, 0x277, FALSE
+	setmetatile 19, 6, 0x269, FALSE
+	setmetatile 19, 7, 0x269, FALSE
+	setmetatile 19, 8, 0x269, FALSE
+	special DrawWholeMapView
+	return
+
+
 LittlerootTown_NewProfessorBirchsLab_EventScript_Bookshelf_Text_0:
 	.string "There is a lever behind\n one of the books.\p Do you want to flip it?$"
 
@@ -74,3 +123,12 @@ LittlerootTown_NewProfessorBirchsLab_EventScript_Yes_Text_0:
 
 LittlerootTown_NewProfessorBirchsLab_EventScript_Yes_Text_1:
 	.string "The bookshelf moved aside!$"
+
+SecretPC1::
+	.string "This PC looks strange.\nIt is built into the wall.\pWhat if there is...?$"
+
+SecretPC2::
+	.string "By playing around with the PC\nYou activated a secret mechanism.$"
+
+SecretPC3::
+	.string "The Wall opened up!$"

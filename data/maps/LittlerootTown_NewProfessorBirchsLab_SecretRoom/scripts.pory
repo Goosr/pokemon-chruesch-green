@@ -2,7 +2,7 @@ mapscripts LittlerootTown_NewProfessorBirchsLab_SecretRoom_MapScripts {
     
 }
 
-script LittlerootTown_NewProfessorBirchsLab_SecretRoom_Pokeball{
+script LittlerootTown_NewProfessorBirchsLab_SecretRoom_Mew{
     
     lockall
     showmonpic(SPECIES_MEW, 10,3) // Shows a picture of the Pokemon to show which one is inside the Ball | IMPORTANT: Needs to be closed with macro: hidemonpic!!
